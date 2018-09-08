@@ -1,5 +1,6 @@
-
-const axios = require('axios');
+const place = require('./place/place'),
+    weather = require('./weather/weather'),
+    colors = require('colors');
 
 const argv = require('yargs').options({
     direction: {
@@ -9,16 +10,31 @@ const argv = require('yargs').options({
     }
 }).argv;
 
-let encodedUrl = encodeURI( argv.direction )
+// place.getPlaceLatLng(argv.direction)
+//     .then((result) => {
+//         console.log(result);
+//     }).catch((err) => {
+//         console.log(err)
+//     });
 
-axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${ encodedUrl }&key=AIzaSyDSLE54inL7zPTG2uETosKMmNnVXA3yju4`)
-.then( resp => {
-    let location = resp.data.results[ 0 ].formatted_address;
-    let lat = resp.data.results[ 0 ].geometry.location.lat;
-    let lng = resp.data.results[ 0 ].geometry.location.lng;
-    // console.log( JSON.stringify( resp.data, undefined, 2 ));
-    console.log( location );
-    console.log( lat );
-    console.log( lng );
-})
-.catch( e => console.log('ERROR!!!', e ));
+// weather.getWeather(20.6596988, -103.3496092)
+//     .then((res) => {
+//         console.log(res)
+//     }, err => console.log(err));
+
+let getInfo = async(direction) => {
+    try {
+        let coords = await place.getPlaceLatLng(direction),
+            temp = await weather.getWeather(coords.lat, coords.lng);
+
+        return `The weather in ${ argv.direction.yellow } is ${ colors.cyan( temp )}`;
+    } catch (e) {
+        return `It could not know the weather at <${ direction.red }> !!!`;
+    }
+}
+
+getInfo(argv.direction)
+    .then(msg => {
+        console.log(msg);
+    })
+    .catch(err => console.log(err));
