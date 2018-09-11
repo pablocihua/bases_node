@@ -5,9 +5,7 @@
 
 05-weather/node_modules
 
-<<<<<<< HEAD
-sockets-fundamentos-master
-=======
 07-sockets/node_modules
 08-sockets/node_modules
->>>>>>> b0c2ed567148d5ef2ff574e4e4c932e2656c801a
+09-socket-stacks/node_modules
+10-socket-chat/node_modules
