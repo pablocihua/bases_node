@@ -1,10 +1,10 @@
-class Users {
+class People {
     constructor() {
         this.people = [];
     }
 
-    addPeople(id, name) {
-        let person = { id, name };
+    addPeople( id, name, room ){
+        let person = { id, name, room };
 
         this.people.push(person);
 
@@ -21,8 +21,12 @@ class Users {
         return this.people;
     }
 
-    getPeopleByRoom() {
-        // Some code ..
+    getPeopleByRoom( room ) {
+        let peopleInRoom = this.people.filter( person => {
+            return person.room === room;
+        });
+
+        return peopleInRoom;
     }
 
     deletePerson(id) {
@@ -37,5 +41,5 @@ class Users {
 }
 
 module.exports = {
-    Users
+    People
 };

@@ -4,11 +4,12 @@ var socket = io(),
 var searchParams = new URLSearchParams(search);
 var person = {};
 
-if (!searchParams.has('name')) {
+if (!searchParams.has('name') || !searchParams.has('room')) {
     window.location = "index.html";
-    throw new Error('The name is required');
+    throw new Error('The name and room are required');
 } else {
     person.name = searchParams.get('name');
+    person.room = searchParams.get('room');
 }
 
 socket.on('connect', function() {
@@ -17,29 +18,21 @@ socket.on('connect', function() {
         console.log(resp);
     });
 });
-
 // Listening
 socket.on('disconnect', function() {
 
     console.log('Perdimos conexión con el servidor');
 });
-
 // Listening information
 socket.on('createMessage', function(message) {
 
     console.log('Server:', message);
 });
-
 // Listening all changes
 socket.on('listToPerson', function(resp) {
     console.log(resp);
 });
-
-/* // Enviar información
-socket.emit('enviarMensaje', {
-    usuario: 'Pablo',
-    mensaje: 'Hola Mundo'
-}, function(resp) {
-    console.log('respuesta server: ', resp);
+// Private message - The client is listening.
+socket.on('privateMessage',function( resp ){
+    console.log('Private Message: ', resp );
 });
-*/
