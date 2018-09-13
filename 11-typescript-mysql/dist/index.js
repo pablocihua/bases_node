@@ -7,6 +7,7 @@ const server_1 = __importDefault(require("./server/server"));
 const router_1 = __importDefault(require("./router/router"));
 const server = server_1.default.init(3000);
 server.app.use(router_1.default);
+// MySql.instance;
 server.start(() => {
     console.log('Server runnig on port 3000');
 });
