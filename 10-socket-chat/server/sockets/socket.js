@@ -19,16 +19,19 @@ io.on('connection', (client) => {
         people.addPeople( client.id, person.name, person.room );
         
         client.broadcast.to( person.room ).emit('listToPerson', people.getPeopleByRoom( person.room ));
+        client.broadcast.to( person.room ).emit('createMessage', createMessage( 'Administrator', `${ person.name } to joins the chat` ) );
         
         let _people = people.getPeopleByRoom( person.room );
         callback(_people);
     });
 
-    client.on('createMessage', ( data ) => {
+    client.on('createMessage', ( data, callback ) => {
         let person = people.getPerson( client.id ),
             message = createMessage( person.name, data.message );
 
         client.broadcast.to( person.room ).emit('createMessage', message );
+
+        callback( message );
     });
 
     client.on('disconnect', () => {
